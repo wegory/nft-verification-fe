@@ -118,20 +118,23 @@ function Account({
 		});
 		
 
+
+		
 		const data = {
 			"account": account,
 			"sig": signature,
 			"token": current["nftAddress"],
 			"msg": message,
-			"iserc721": 1, 
-			"tokenid": current["tokenID"],
+			"is-erc721": 1, 
+			"req-bal": 1, 
+			"token-id": current["tokenID"],
 			"chain": "ethereum",
-			"reqBal": 1
+			"eq-bal": 1
 		}
 
 		console.log(data)
 
-		const response = await axios.get(
+		const response = await axios.post(
 			"https://nansen-on-chain-auth-api-jjr6pd3pjq-uc.a.run.app/v1/verify-sig-and-ownership",
 			data
 		  );
