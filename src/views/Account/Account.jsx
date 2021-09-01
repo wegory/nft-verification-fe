@@ -1,231 +1,139 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {
-	getChainId, getAccount, requestAccount, getBalance, sendTransaction,
-} from '../../store/ethereum/ethereumSlice';
-import AccountListener from './AccountListener';
-import Logo from '../../components/Logo';
-import EthNumber from '../../components/EthNumber';
-import TransactionForm from '../../components/TransactionForm';
-import TransactionList from '../../components/TransactionList';
-import { numberToHexString, WEI, GWEI } from '../../utils/ethereumConvert';
-import useStyles from './Account.style';
-import axios from 'axios';
+import React, { useEffect, useState, useCallback } from "react";
+import { connect } from "react-redux";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import { getChainId, getAccount, requestAccount, getBalance, sendTransaction } from "../../store/ethereum/ethereumSlice";
+import AccountListener from "./AccountListener";
+import Logo from "../../components/Logo";
+import useStyles from "./Account.style";
+import axios from "axios";
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
 
-let formElements = [{
-	label: "NFT Address",
-	key: "nftAddress"
-}, {
-	label: "Token ID",
-	key: "tokenID"
-},
-{
-	label: "Telegram Handle",
-	key: "tgHandle"
-}
-]
+let chatGroups = [
+  { name: "VoxoDeus", minBalance: 1, contractAddress: "0x5c48b2e715ac9bc8d9b1aa633691d71c0748670d" },
+  {
+    name: "CryptKittiesRinkeby",
+    minBalance: 1,
+    contractAddress: "0x16baf0de678e52367adc69fd067e5edd1d33e3bf",
+  },
+  {
+    name: "SUSHI Millionaire Club",
+    minBalance: 83333000000000000000000,
+    contractAddress: "0x0ead1160bd2ca5a653e11fae3d2b39e4948bda4d",
+  },
+];
 
+const fetchChatGroups = async () => {
+  //   const response = await axios.get("https://nansen-on-chain-auth-api-jjr6pd3pjq-uc.a.run.app/v1/get-channels");
+  // data = response.data
 
-function Account({
-	// states
-	chainId,
-	account,
-	balance,
-	transactions,
-	isLoading,
-	// actions
-	getChainId,
-	getAccount,
-	requestAccount,
-	getBalance,
-	sendTransaction,
-}) {
-	useEffect(() => {
-		getChainId();
-		getAccount();
-	}, []);
+  const data = chatGroups;
 
-	useEffect(() => {
-		if (account) {
-			getBalance(account);
-		}
-	}, [account]);
+  let options = [];
 
-	const [formData, setFormData] = useState({});
+  data.map((chatGroup) => {
+    options.push({
+      value: chatGroup,
+      label: chatGroup["name"] + ` (${chatGroup["minBalance"]} token required to join)`,
+    });
+  });
 
-	const [isFormOpen, setFormOpen, contractAddress, setContractAddress] = useState(false);
+  return data, options;
+};
 
-	const connectClick = useCallback(requestAccount, []);
+function Account({ account, isLoading, getChainId, getAccount, requestAccount, getBalance, sendTransaction }) {
+  useEffect(() => {
+    getChainId();
+    getAccount();
+  }, []);
 
-	const toggleFormClick = useCallback(() => { setFormOpen(!isFormOpen) }, [isFormOpen]);
+  useEffect(() => {
+    if (account) {
+      getBalance(account);
+    }
+  }, [account]);
 
-	const copyClick = useCallback(() => { navigator.clipboard.writeText(account) }, [account]);
+  const [chatGroups, setChatGroups] = useState([]);
+  const [chatGroup, setChatGroup] = useState(null);
 
-	const numberClick = useCallback(() => { getBalance(account) }, [account]);
+  const getChatGroups = async () => {
+    let chatGroups = await fetchChatGroups();
+    setChatGroups(chatGroups);
+  };
 
-	const getTransactionDataModel = ({
-		address,
-		value,
-		gasPrice,
-		gasLimit,
-	}) => ({
-		from: account,
-		to: address,
-		value: numberToHexString(value * WEI),
-		gasPrice: numberToHexString(gasPrice * GWEI),
-		gas: numberToHexString(gasLimit),
-	})
+  useEffect(() => {
+    getChatGroups();
+  }, []);
 
-	const handleSendTransaction = async (data) => {
-		const transactionData = getTransactionDataModel(data);
-		await sendTransaction(transactionData);
-	}
+  const connectClick = useCallback(requestAccount, []);
 
-	const handleChange = (value, key) => {
-		console.log(value, key)
+  const sign = async () => {
+    if (chatGroup) {
+      const currentTime = new Date().toLocaleString();
 
-		var current = formData
-		current[key] = value
-		setFormData(current)
+      const message = `Alohomora: ${currentTime}`;
 
-		// setFormData({ ...formData }, ...{ [key]: value });
-	}
+      const from = account;
 
-	const sign = async () => {
+      const signature = await ethereum.request({
+        method: "personal_sign",
+        params: [message, from],
+      });
 
-		var current = formData
-		current["address"] = account
-		// console.log(ethereum)
+      if (signature) {
+        const data = {
+          account,
+          sig: signature,
+          token: chatGroup["value"]["contractAddress"],
+          msg: message,
+          "req-bal": 1,
+          chain: "ethereum",
+        };
+        console.log("data:", data);
+        const response = await axios.post("https://nansen-on-chain-auth-api-jjr6pd3pjq-uc.a.run.app/v1/verify-sig-and-ownership", data);
+        console.log("response:", response);
+      }
+    }
+  };
+  const classes = useStyles();
 
-		const currentTime = new Date().toLocaleString()
-
-
-		const message = `Alohomora: ${currentTime}`
-
-		const from = account
-
-		const signature = await ethereum.request({
-			method: 'personal_sign',
-			params: [
-				message,
-				from
-			],
-		});
-		
-
-
-		
-		const data = {
-			"account": account,
-			"sig": signature,
-			"token": current["nftAddress"],
-			"msg": message,
-			"is-erc721": 1, 
-			"req-bal": 1, 
-			"token-id": current["tokenID"],
-			"chain": "ethereum",
-			"eq-bal": 1
-		}
-
-		console.log(data)
-
-		const response = await axios.post(
-			"https://nansen-on-chain-auth-api-jjr6pd3pjq-uc.a.run.app/v1/verify-sig-and-ownership",
-			data
-		  );
-		
-		  console.log(response);
-
-
-
-		// const web3 = new Web3(web3.currentProvider);
-		// console.log(ethereum.isConnected())
-		// const signature = await web3.eth.personal.sign(
-		// 	web3.utils.toHex(message),
-		// 	account
-		// );
-		// console.log(signature)
-		alert(JSON.stringify(formData));
-
-
-
-	}
-	const classes = useStyles();
-
-	return (
-		<div className={classes.account}>
-			<AccountListener getAccount={getAccount} />
-			<Logo />
-			<Typography variant="h2"> Nansen NFT Spaces </Typography>
-			<Typography variant="subtitle1"> Private Telegram Chat spaces for verified NFT/ERC20 Owners </Typography>
-
-			{/* <Typography variant="subtitle2">Chain ID: {chainId}</Typography>
-			<Typography variant="h5">Account</Typography> */}
-			{account ? (
-				<>
-					{/* <Tooltip title="Copy to clipboard" placement="top">
-						<Button onClick={copyClick}>
-							<Typography variant="caption">{account}</Typography>
-						</Button>
-					</Tooltip> */}
-					<EthNumber balance={balance} onClick={numberClick} />
-
-					<form>
-
-						{formElements.map(formElement => {
-							return <div className="m3">
-								{formElement.label}
-								<input value={formData[formElement.key]} style={{ backgroundColor: '#343a40', borderRadius: 50, padding:'offset' }}
-									onChange={(e) => { e.preventDefault(); handleChange(e.target.value, formElement.key) }} />
-
-							</div>
-						})}
-
-
-					</form>
-
-					<button onClick={sign}>sign</button>
-
-
-					{/* <IconButton className={classes.toggleForm} onClick={toggleFormClick}>
-            <ExpandMoreIcon className={isFormOpen ? classes.hideForm : ''} fontSize="large" />
-          </IconButton>
-          {isFormOpen && <TransactionForm onSubmit={handleSendTransaction} disabled={isLoading} />}
-          <TransactionList transactions={transactions} /> */}
-				</>
-			) : (
-				<Button
-					className={classes.connectButton}
-					variant="contained"
-					color="primary"
-					onClick={connectClick}
-					disabled={isLoading}
-				>
-					Connect
-				</Button>
-			)}
-		</div>
-	)
+  return (
+    <div className={classes.account}>
+      <AccountListener getAccount={getAccount} />
+      <Logo />
+      <Typography variant="h2"> Nansen NFT Spaces </Typography>
+      <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
+        Private Discord Chat spaces for verified NFT/ERC20 Owners{" "}
+      </Typography>
+      <Dropdown options={chatGroups} onChange={(chatGroup) => setChatGroup(chatGroup)} value={null} placeholder="Select private chat group to join" />
+      ;
+      {account ? (
+        <>
+          <button onClick={sign}>Verify and Join</button>
+        </>
+      ) : (
+        <Button className={classes.connectButton} variant="contained" color="primary" onClick={connectClick} disabled={isLoading}>
+          Connect
+        </Button>
+      )}
+    </div>
+  );
 }
 
 export default connect(
-	(state) => ({
-		chainId: state.ethereum.chainId,
-		account: state.ethereum.account,
-		balance: state.ethereum.balance,
-		transactions: state.ethereum.transactions,
-		isLoading: state.ethereum.isLoading,
-	}),
-	{
-		getChainId,
-		getAccount,
-		requestAccount,
-		getBalance,
-		sendTransaction,
-	},
+  (state) => ({
+    chainId: state.ethereum.chainId,
+    account: state.ethereum.account,
+    balance: state.ethereum.balance,
+    transactions: state.ethereum.transactions,
+    isLoading: state.ethereum.isLoading,
+  }),
+  {
+    getChainId,
+    getAccount,
+    requestAccount,
+    getBalance,
+    sendTransaction,
+  }
 )(Account);
