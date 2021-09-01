@@ -114,9 +114,7 @@ function Account({ account, isLoading, getChainId, getAccount, requestAccount, g
           <button onClick={sign}>Verify and Join</button>
         </>
       ) : (
-        <Button className={classes.connectButton} variant="contained" color="primary" onClick={connectClick} disabled={isLoading}>
-          Connect
-        </Button>
+        <button onClick={connectClick}>Connect</button>
       )}
     </div>
   );
