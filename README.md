@@ -1,6 +1,6 @@
-# React MetaMask 🦊 Example
+# NFT/ERC20 Verification FE
 
-A react example project which can connect to MetaMask wallet and sending transaction.
+A simple react project 
 
 ### Packages
 
