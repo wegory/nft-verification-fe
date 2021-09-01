@@ -15,7 +15,7 @@ import TransactionForm from '../../components/TransactionForm';
 import TransactionList from '../../components/TransactionList';
 import { numberToHexString, WEI, GWEI } from '../../utils/ethereumConvert';
 import useStyles from './Account.style';
-// import Web3 from 'web3';
+import axios from 'axios';
 
 let formElements = [{
 	label: "NFT Address",
@@ -101,7 +101,12 @@ function Account({
 		var current = formData
 		current["address"] = account
 		// console.log(ethereum)
-		const message = "Test123"
+
+		const currentTime = new Date().toLocaleString()
+
+
+		const message = `Alohomora: ${currentTime}`
+
 		const from = account
 
 		const signature = await ethereum.request({
@@ -111,8 +116,30 @@ function Account({
 				from
 			],
 		});
-		// Handle the result
-		console.log(signature);
+		
+
+		const data = {
+			"account": account,
+			"sig": signature,
+			"token": current["nftAddress"],
+			"msg": message,
+			"iserc721": 1, 
+			"tokenid": current["tokenID"],
+			"chain": "ethereum",
+			"reqBal": 1
+		}
+
+		console.log(data)
+
+		const response = await axios.get(
+			"https://nansen-on-chain-auth-api-jjr6pd3pjq-uc.a.run.app/v1/verify-sig-and-ownership",
+			data
+		  );
+		
+		  console.log(response);
+
+
+
 		// const web3 = new Web3(web3.currentProvider);
 		// console.log(ethereum.isConnected())
 		// const signature = await web3.eth.personal.sign(
