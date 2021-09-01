@@ -180,7 +180,7 @@ function Account({
 						{formElements.map(formElement => {
 							return <div className="m3">
 								{formElement.label}
-								<input value={formData[formElement.key]}
+								<input value={formData[formElement.key]} style={{ backgroundColor: '#343a40', borderRadius: 50, padding:'offset' }}
 									onChange={(e) => { e.preventDefault(); handleChange(e.target.value, formElement.key) }} />
 
 							</div>
