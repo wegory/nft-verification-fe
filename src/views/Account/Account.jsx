@@ -35,7 +35,8 @@ const fetchChatGroups = async () => {
   data.map((chatGroup) => {
     options.push({
       value: chatGroup,
-      label: chatGroup["name"] + ` (${chatGroup["minBalance"]} token required to join)`,
+      label:
+        chatGroup["name"] + ` (you need to have at least ${chatGroup["minBalance"]} ${chatGroup["minBalance"] != 1 ? "tokens" : "token"} to join)`,
     });
   });
 
