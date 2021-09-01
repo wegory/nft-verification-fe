@@ -107,7 +107,12 @@ function Account({ account, isLoading, getChainId, getAccount, requestAccount, g
       <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
         Private Discord Chat spaces for verified NFT/ERC20 Owners{" "}
       </Typography>
-      <Dropdown options={chatGroups} onChange={(chatGroup) => setChatGroup(chatGroup)} value={null} placeholder="Select private chat group to join" />
+      <Dropdown
+        options={chatGroups}
+        onChange={(chatGroup) => setChatGroup(chatGroup)}
+        value={null}
+        placeholder="Select private chat group to join 👇"
+      />
       ;
       {account ? (
         <>
