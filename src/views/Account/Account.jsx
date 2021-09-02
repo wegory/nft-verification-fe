@@ -136,7 +136,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
             if (response.data["error"]) {
               addToast(`Verification failed. Are you trying to trick us? 🤨`, { appearance: "error" });
             } else {
-              addToast("Awesome! You have been added to a private channel in Nansen Verified Clubs's server  😎", { appearance: "success" });
+              addToast("Awesome! You have been added to a private channel in Nansen Diamond Hands Club's server  😎", { appearance: "success" });
             }
           }
         }
@@ -172,7 +172,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
         <div className={"card"}>
           <Typography variant="h3">Nansen Diamond Hands Club</Typography>
           <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
-            Private Discord Channel for Verified NFT/ERC20 Owners{" "}
+            Private Discord Channel for club NFT/ERC20 Owners{" "}
           </Typography>
           <a href={`https://discord.gg/vXbTWnyd`} target="_blank" rel="noreferrer">
             <div className={"joinButton"}>
@@ -202,7 +202,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
             </span>{" "}
             in our{" "}
             <a href={`https://discord.gg/vXbTWnyd?`} target="_blank" rel="noreferrer">
-              Nansen Verified Clubs Discord
+              Nansen Diamond Hands Club Discord
             </a>
           </span>
 
