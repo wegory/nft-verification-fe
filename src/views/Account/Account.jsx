@@ -201,7 +201,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
               .whoami
             </span>{" "}
             in our{" "}
-            <a href={`https://discord.gg/vXbTWnyd?`} target="_blank" rel="noreferrer">
+            <a href={`https://discord.com/channels/882633847852892221/882633848297496598`} target="_blank" rel="noreferrer">
               Nansen Diamond Hands Club Discord
             </a>
           </span>
