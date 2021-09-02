@@ -170,7 +170,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
         </a>
 
         <div className={"card"}>
-          <Typography variant="h3">Nansen Verified Clubs</Typography>
+          <Typography variant="h3">Nansen Diamond Hands Club</Typography>
           <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
             Private Discord Channel for Verified NFT/ERC20 Owners{" "}
           </Typography>
