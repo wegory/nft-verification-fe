@@ -176,7 +176,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
           </Typography>
           <a href={`https://discord.gg/vXbTWnyd`} target="_blank" rel="noreferrer">
             <div className={"joinButton"}>
-              Join Nansen Verified Clubs On Discord
+              Join Nansen Diamond Hands Club On Discord
               <br />
               <span onClick={() => copyText("https://discord.gg/vXbTWnyd")}>Invite: https://discord.gg/vXbTWnyd</span>
             </div>
