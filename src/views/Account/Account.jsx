@@ -187,7 +187,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
               Nansen Discord Server
             </a>{" "}
             and type{" "}
-            <span style={{ color: "#bbc7d8", opacity: 0.6, cursor: "pointer" }} onClick={() => copyText()}>
+            <span style={{ color: "#b9b9b9", cursor: "pointer" }} onClick={() => copyText()}>
               .whoami
             </span>
           </span>
