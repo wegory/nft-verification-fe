@@ -25,10 +25,10 @@ let chatGroups = [
 ];
 
 const fetchChatGroups = async () => {
-  //   const response = await axios.get("https://nansen-on-chain-auth-api-jjr6pd3pjq-uc.a.run.app/v1/get-channels");
-  // data = response.data
+  const response = await axios.get("https://nansen-on-chain-auth-api-jjr6pd3pjq-uc.a.run.app/v1/get-channels");
+  const data = response.data;
 
-  const data = chatGroups;
+  //   const data = chatGroups;
 
   let options = [];
 
