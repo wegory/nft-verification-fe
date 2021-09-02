@@ -35,9 +35,11 @@ button {
   cursor: pointer;
   border-radius: 15px;
   padding: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
   margin-top: 15px;
   height: 50px;
-  min-width: 180px;
+  min-width: 200px;
   border: none;
   color: #e3e3e3;
   font-size: 18px;
@@ -45,4 +47,57 @@ button {
 
 button:hover {
   background-color: #739ee4;
+}
+
+input {
+  padding: 5px;
+  background-color: #060910;
+  color: #e3e3e3;
+  border: none;
+  height: 40px;
+  border-radius: 15px;
+  padding-left: 15px;
+  /* padding-right: 10px; */
+  /* min-width: 400px; */
+  font-size: 15px;
+  width: 97%;
+}
+
+.dropdown {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.card {
+  margin: auto;
+  min-width: 700px;
+  margin-top: 50px;
+  max-width: 600px;
+  padding: 50px;
+  padding-top: 30px;
+  padding-bottom: 40px;
+  border-radius: 15px;
+  box-shadow: 2px 2px 30px #000000;
+  background-color: #131723;
+}
+
+a,
+span {
+  color: #7c94b6;
+  text-decoration: none;
+  font-size: 12px;
+  cursor: pointer;
+}
+a:hover {
+  color: #bbc7d8;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
