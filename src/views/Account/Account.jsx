@@ -105,7 +105,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
       setIsLoading(true);
       const currentTime = new Date().toLocaleString();
 
-      const message = `Join ${chatGroup["value"]["name"]} Private Chat - ${currentTime}`;
+      const message = `Join ${chatGroup["value"]["name"]} Private Channel - ${currentTime}`;
 
       const from = account;
       try {
@@ -181,7 +181,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
             </label>
             {/* <input style={{ marginLeft: 2, width: 100, height: 50, backgroundColor: "#323f54", cursor: "pointer" }} type="submit" value="Get your Discord UID with our Discord bot" /> */}
           </form>
-          <span onClick={() => copyText()} style={{ cursor: null }}>
+          <span style={{ cursor: null }}>
             Have trouble finding your Discord User ID? Join this{" "}
             <a href={`https://discord.gg/vXbTWnyd?`} target="_blank" rel="noreferrer">
               Nansen Discord Server
