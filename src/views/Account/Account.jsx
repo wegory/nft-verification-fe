@@ -105,7 +105,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
       setIsLoading(true);
       const currentTime = new Date().toLocaleString();
 
-      const message = `Alohomora: ${currentTime}`;
+      const message = `Join ${chatGroup["value"]["name"]} Private Chat - ${currentTime}`;
 
       const from = account;
       try {
@@ -181,11 +181,15 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
             </label>
             {/* <input style={{ marginLeft: 2, width: 100, height: 50, backgroundColor: "#323f54", cursor: "pointer" }} type="submit" value="Get your Discord UID with our Discord bot" /> */}
           </form>
-          <a href={`https://discord.gg/vXbTWnyd?`} target="_blank" rel="noreferrer">
-            Have trouble finding your Discord User ID? Join this Nansen Discord Server and type
-          </a>{" "}
-          <span style={{ color: "white", opacity: 0.6 }} onClick={() => copyText()}>
-            .whoami
+          <span onClick={() => copyText()} style={{ cursor: null }}>
+            Have trouble finding your Discord User ID? Join this{" "}
+            <a href={`https://discord.gg/vXbTWnyd?`} target="_blank" rel="noreferrer">
+              Nansen Discord Server
+            </a>{" "}
+            and type{" "}
+            <span style={{ color: "#bbc7d8", opacity: 0.6, cursor: "pointer" }} onClick={() => copyText()}>
+              .whoami
+            </span>
           </span>
           <div style={{ marginTop: 20, opacity: isLoading ? 0.3 : 1 }}>
             {account ? (

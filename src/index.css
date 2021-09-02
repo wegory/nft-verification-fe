@@ -81,15 +81,21 @@ input {
   background-color: #131723;
 }
 
-a,
-span {
-  color: #7c94b6;
+a {
+  color: #b9b9b9;
   text-decoration: none;
   font-size: 12px;
   cursor: pointer;
 }
+
 a:hover {
   color: #bbc7d8;
+}
+
+span {
+  color: #7c94b6;
+  text-decoration: none;
+  font-size: 12px;
 }
 
 ::-webkit-scrollbar {
