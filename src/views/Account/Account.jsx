@@ -158,12 +158,14 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
       <HashLoader color={"#32c8a0"} style={{ opacity: 1 }} loading={isLoading} css={override} size={80} />
       <div className={classes.account} style={{ opacity: isLoading ? 0.2 : 1 }}>
         <AccountListener getAccount={getAccount} />
-        <Logo />
+        <a href={`https://nansen.ai/`} target="_blank" rel="noreferrer">
+          <Logo />
+        </a>
 
         <div className={"card"}>
-          <Typography variant="h2">Nansen Verified Club</Typography>
+          <Typography variant="h2">Nansen Verified Clubs</Typography>
           <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
-            Private Discord Chat spaces for verified NFT/ERC20 Owners{" "}
+            Private Discord Chats for Verified NFT/ERC20 Owners{" "}
           </Typography>
           <Dropdown
             options={chatGroups}
