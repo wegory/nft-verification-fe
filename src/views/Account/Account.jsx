@@ -180,7 +180,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
             {/* <input style={{ marginLeft: 2, width: 100, height: 50, backgroundColor: "#323f54", cursor: "pointer" }} type="submit" value="Get your Discord UID with our Discord bot" /> */}
           </form>
           <a href={`https://discord.gg/vXbTWnyd?`} target="_blank" rel="noreferrer">
-            Have trouble finding your Discord User ID? Join this Discord Server and type
+            Have trouble finding your Discord User ID? Join this Nansen Discord Server and type
           </a>{" "}
           <span style={{ color: "white", opacity: 0.6 }} onClick={() => copyText()}>
             .whoami
