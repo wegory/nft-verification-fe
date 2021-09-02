@@ -10,6 +10,18 @@ import axios from "axios";
 import Dropdown from "react-dropdown";
 import { useToasts } from "react-toast-notifications";
 import "react-dropdown/style.css";
+import { css } from "@emotion/react";
+import HashLoader from "react-spinners/HashLoader";
+
+const override = css`
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  border-color: red;
+  margin-top: 250px;
+`;
 
 let chatGroups = [
   {
@@ -18,6 +30,8 @@ let chatGroups = [
     minBalance: 1,
     name: "VoxoDeus",
     platform: "rinkeby",
+    decimal: 0,
+    symbol: "VOX",
   },
   {
     contractAddress: "0x16baf0de678e52367adc69fd067e5edd1d33e3bf",
@@ -25,6 +39,8 @@ let chatGroups = [
     minBalance: 1,
     name: "CryptKittiesRinkeby",
     platform: "rinkeby",
+    decimal: 0,
+    symbol: "KITTY",
   },
   {
     contractAddress: "0x0ead1160bd2ca5a653e11fae3d2b39e4948bda4d",
@@ -32,6 +48,8 @@ let chatGroups = [
     minBalance: 8.3333e22,
     name: "SUSHI Millionaire Club",
     platform: "rinkeby",
+    decimal: 18,
+    symbol: "SUSHI",
   },
 ];
 
@@ -46,17 +64,14 @@ const fetchChatGroups = async () => {
   data.map((chatGroup) => {
     options.push({
       value: chatGroup,
-      label:
-        chatGroup["name"] + ` (you need to have at least ${chatGroup["minBalance"]} ${chatGroup["minBalance"] != 1 ? "tokens" : "token"} to join)`,
+      label: chatGroup["name"] + ` (min. ${chatGroup["minBalance"] / Math.pow(10, chatGroup["decimal"])} ${chatGroup["symbol"]} to join)`,
     });
   });
 
   return data, options;
 };
 
-function Account({ account, isLoading, getChainId, getAccount, requestAccount, getBalance }) {
-  console.log("account:", account);
-
+function Account({ account, getChainId, getAccount, requestAccount, getBalance }) {
   const { addToast } = useToasts();
   useEffect(() => {
     getChainId();
@@ -72,6 +87,7 @@ function Account({ account, isLoading, getChainId, getAccount, requestAccount, g
   const [chatGroups, setChatGroups] = useState([]);
   const [chatGroup, setChatGroup] = useState(null);
   const [discordUid, setDiscordUid] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getChatGroups = async () => {
     let chatGroups = await fetchChatGroups();
@@ -85,7 +101,8 @@ function Account({ account, isLoading, getChainId, getAccount, requestAccount, g
   const connectClick = useCallback(requestAccount, []);
 
   const sign = async () => {
-    if (account && chatGroup && discordUid) {
+    if (!isLoading && account && chatGroup && discordUid) {
+      setIsLoading(true);
       const currentTime = new Date().toLocaleString();
 
       const message = `Alohomora: ${currentTime}`;
@@ -108,11 +125,19 @@ function Account({ account, isLoading, getChainId, getAccount, requestAccount, g
           console.log("data:", data);
           const response = await axios.post("https://nansen-on-chain-auth-api-jjr6pd3pjq-uc.a.run.app/v2/verify-sig-and-ownership", data);
           console.log("response:", response);
+          if (response && response.data) {
+            if (response.data["error"]) {
+              addToast(`Verification failed. Are you trying to trick us? 🤨`, { appearance: "error" });
+            } else {
+              addToast("Awesome! You have been added to the private group 😎", { appearance: "success" });
+            }
+          }
         }
       } catch (e) {
         console.log("error", e);
         addToast("Verification canceled by user", { appearance: "warning" });
       }
+      setIsLoading(false);
     } else if (account === null) {
       addToast("Please connect to metamask first", { appearance: "error" });
     } else if (chatGroup === null) {
@@ -123,61 +148,55 @@ function Account({ account, isLoading, getChainId, getAccount, requestAccount, g
   };
   const classes = useStyles();
 
-  //   const handleSubmit = async (evt) => {
-  //     evt.preventDefault();
-  //   };
-
   const copyText = (text) => {
     addToast("Copied to clipboard", { appearance: "info" });
     navigator.clipboard.writeText(text);
   };
 
-  //   const handleDiscordIdInput = (evt) => {
-  // 	evt.preventDefault();
-  // 	setDiscordUid(evt)
-  //   }
-
   return (
-    <div className={classes.account}>
-      <AccountListener getAccount={getAccount} />
-      <Logo />
+    <>
+      <HashLoader color={"#32c8a0"} style={{ opacity: 1 }} loading={isLoading} css={override} size={80} />
+      <div className={classes.account} style={{ opacity: isLoading ? 0.2 : 1 }}>
+        <AccountListener getAccount={getAccount} />
+        <Logo />
 
-      <div className={"card"}>
-        <Typography variant="h2"> Nansen NFT Spaces </Typography>
-        <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
-          Private Discord Chat spaces for verified NFT/ERC20 Owners{" "}
-        </Typography>
-        <Dropdown
-          options={chatGroups}
-          onChange={(chatGroup) => setChatGroup(chatGroup)}
-          value={null}
-          placeholder="Select private chat group to join 👇"
-          className={"dropdown"}
-        />
-        <form style={{ marginTop: 20, marginBottom: 10 }}>
-          <label>
-            {/* <p onClick={useBalanceOf} style={{ cursor: "pointer", marginBottom: 10 }}></p> */}
-            <input type="number" value={null} onChange={(e) => setDiscordUid(e.target.value)} placeholder={"Discord User ID"} />
-          </label>
-          {/* <input style={{ marginLeft: 2, width: 100, height: 50, backgroundColor: "#323f54", cursor: "pointer" }} type="submit" value="Get your Discord UID with our Discord bot" /> */}
-        </form>
-        <a href={`https://discord.gg/vXbTWnyd?`} target="_blank" rel="noreferrer">
-          Have trouble finding your Discord User ID? Join this Discord Server and type
-        </a>{" "}
-        <span style={{ color: "white", opacity: 0.6 }} onClick={() => copyText()}>
-          .whoami
-        </span>
-        <div style={{ marginTop: 20 }}>
-          {account ? (
-            <>
-              <button onClick={sign}>Verify and Join</button>
-            </>
-          ) : (
-            <button onClick={connectClick}>Verify with Metamask</button>
-          )}
+        <div className={"card"}>
+          <Typography variant="h2"> Nansen NFT Spaces </Typography>
+          <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
+            Private Discord Chat spaces for verified NFT/ERC20 Owners{" "}
+          </Typography>
+          <Dropdown
+            options={chatGroups}
+            onChange={(chatGroup) => setChatGroup(chatGroup)}
+            value={null}
+            placeholder="Select private chat group to join 👇"
+            className={"dropdown"}
+          />
+          <form style={{ marginTop: 20, marginBottom: 10 }}>
+            <label>
+              {/* <p onClick={useBalanceOf} style={{ cursor: "pointer", marginBottom: 10 }}></p> */}
+              <input type="number" value={null} onChange={(e) => setDiscordUid(e.target.value)} placeholder={"Discord User ID"} />
+            </label>
+            {/* <input style={{ marginLeft: 2, width: 100, height: 50, backgroundColor: "#323f54", cursor: "pointer" }} type="submit" value="Get your Discord UID with our Discord bot" /> */}
+          </form>
+          <a href={`https://discord.gg/vXbTWnyd?`} target="_blank" rel="noreferrer">
+            Have trouble finding your Discord User ID? Join this Discord Server and type
+          </a>{" "}
+          <span style={{ color: "white", opacity: 0.6 }} onClick={() => copyText()}>
+            .whoami
+          </span>
+          <div style={{ marginTop: 20, opacity: isLoading ? 0.3 : 1 }}>
+            {account ? (
+              <>
+                <button onClick={sign}>Verify and Join</button>
+              </>
+            ) : (
+              <button onClick={connectClick}>Connect to Metamask</button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -187,7 +206,6 @@ export default connect(
     account: state.ethereum.account,
     balance: state.ethereum.balance,
     transactions: state.ethereum.transactions,
-    isLoading: state.ethereum.isLoading,
   }),
   {
     getChainId,
