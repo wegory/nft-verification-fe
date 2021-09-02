@@ -191,7 +191,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
           <form style={{ marginTop: 20, marginBottom: 10 }}>
             <label>
               {/* <p onClick={useBalanceOf} style={{ cursor: "pointer", marginBottom: 10 }}></p> */}
-              <input type="number" value={null} onChange={(e) => setDiscordUid(e.target.value)} placeholder={"Discord User ID"} />
+              <input type="number" value={null} onChange={(e) => setDiscordUid(e.target.value)} placeholder={"Discord User ID - e.g. 100022894656225123"} />
             </label>
             {/* <input style={{ marginLeft: 2, width: 100, height: 50, backgroundColor: "#323f54", cursor: "pointer" }} type="submit" value="Get your Discord UID with our Discord bot" /> */}
           </form>
