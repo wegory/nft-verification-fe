@@ -174,12 +174,13 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
           <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
             Private Discord Channel for Verified NFT/ERC20 Owners{" "}
           </Typography>
-
-          <div className={"joinButton"}>
-            Join Nansen Verified Clubs On Discord
-            <br />
-            <span onClick={() => copyText("https://discord.gg/vXbTWnyd")}>Invite: https://discord.gg/vXbTWnyd</span>
-          </div>
+          <a href={`https://discord.gg/vXbTWnyd`} target="_blank" rel="noreferrer">
+            <div className={"joinButton"}>
+              Join Nansen Verified Clubs On Discord
+              <br />
+              <span onClick={() => copyText("https://discord.gg/vXbTWnyd")}>Invite: https://discord.gg/vXbTWnyd</span>
+            </div>
+          </a>
           <Dropdown
             options={chatGroups}
             onChange={(chatGroup) => setChatGroup(chatGroup)}
