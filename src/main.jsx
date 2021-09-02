@@ -9,7 +9,7 @@ import "./index.css";
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ToastProvider autoDismiss autoDismissTimeout={6000} placement="top-right">
+      <ToastProvider autoDismiss autoDismissTimeout={10000} placement="top-right">
         <Router />
       </ToastProvider>
     </Provider>

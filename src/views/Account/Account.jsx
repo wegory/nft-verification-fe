@@ -136,7 +136,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
             if (response.data["error"]) {
               addToast(`Verification failed. Are you trying to trick us? 🤨`, { appearance: "error" });
             } else {
-              addToast("Awesome! You have been added to the private channel 😎", { appearance: "success" });
+              addToast("Awesome! You have been added to a private channel in Nansen Verified Clubs's server  😎", { appearance: "success" });
             }
           }
         }
@@ -178,7 +178,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
           <div className={"joinButton"}>
             Join Nansen Verified Clubs On Discord
             <br />
-            <span>Invite: https://discord.gg/vXbTWnyd</span>
+            <span onClick={() => copyText("https://discord.gg/vXbTWnyd")}>Invite: https://discord.gg/vXbTWnyd</span>
           </div>
           <Dropdown
             options={chatGroups}
@@ -196,7 +196,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
           </form>
           <span style={{ cursor: null }}>
             Have trouble finding your Discord User ID? Type{" "}
-            <span style={{ color: "#b9b9b9", cursor: "pointer" }} onClick={() => copyText()}>
+            <span style={{ color: "#b9b9b9", cursor: "pointer" }} onClick={() => copyText(".whoami")}>
               .whoami
             </span>{" "}
             in our{" "}
