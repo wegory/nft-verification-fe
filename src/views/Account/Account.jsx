@@ -54,17 +54,17 @@ let chatGroups = [
 ];
 
 const fetchChatGroups = async () => {
-  //   const response = await axios.get("https://nansen-on-chain-auth-api-jjr6pd3pjq-uc.a.run.app/v1/get-channels"); // prod
-  //   const data = response.data; // prod
+  const response = await axios.get("https://nansen-on-chain-auth-api-jjr6pd3pjq-uc.a.run.app/v1/get-channels"); // prod
+  const data = response.data; // prod
 
-  const data = chatGroups; // dev
+  // const data = chatGroups; // dev
 
   let options = [];
 
   data.map((chatGroup) => {
     options.push({
       value: chatGroup,
-      label: chatGroup["name"] + ` (min. ${chatGroup["minBalance"] / Math.pow(10, chatGroup["decimal"])} ${chatGroup["symbol"]} to join)`,
+      label: chatGroup["name"] + ` (min. ${chatGroup["minBalance"] / Math.pow(10, chatGroup["decimals"])} ${chatGroup["symbol"]} to join)`,
     });
   });
 
@@ -161,7 +161,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
         <Logo />
 
         <div className={"card"}>
-          <Typography variant="h2"> Nansen NFT Spaces </Typography>
+          <Typography variant="h2">Nansen Verified Club</Typography>
           <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
             Private Discord Chat spaces for verified NFT/ERC20 Owners{" "}
           </Typography>
