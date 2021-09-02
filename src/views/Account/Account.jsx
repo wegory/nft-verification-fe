@@ -23,6 +23,10 @@ const override = css`
   margin-top: 250px;
 `;
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 let chatGroups = [
   {
     contractAddress: "0x5c48b2e715ac9bc8d9b1aa633691d71c0748670d",
@@ -64,7 +68,10 @@ const fetchChatGroups = async () => {
   data.map((chatGroup) => {
     options.push({
       value: chatGroup,
-      label: chatGroup["name"] + ` (min. ${chatGroup["minBalance"] / Math.pow(10, chatGroup["decimals"])} ${chatGroup["symbol"]} to join)`,
+      label:
+        chatGroup["name"] +
+        ` | ${capitalizeFirstLetter(chatGroup["platform"])}` +
+        ` (min. ${chatGroup["minBalance"] / Math.pow(10, chatGroup["decimals"])} ${chatGroup["symbol"]} to join)`,
     });
   });
 
@@ -129,7 +136,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
             if (response.data["error"]) {
               addToast(`Verification failed. Are you trying to trick us? 🤨`, { appearance: "error" });
             } else {
-              addToast("Awesome! You have been added to the private group 😎", { appearance: "success" });
+              addToast("Awesome! You have been added to the private channel 😎", { appearance: "success" });
             }
           }
         }
@@ -163,15 +170,21 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
         </a>
 
         <div className={"card"}>
-          <Typography variant="h2">Nansen Verified Clubs</Typography>
+          <Typography variant="h3">Nansen Verified Clubs</Typography>
           <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
-            Private Discord Chats for Verified NFT/ERC20 Owners{" "}
+            Private Discord Channel for Verified NFT/ERC20 Owners{" "}
           </Typography>
+
+          <div className={"joinButton"}>
+            Join Nansen Verified Clubs On Discord
+            <br />
+            <span>Invite: https://discord.gg/vXbTWnyd</span>
+          </div>
           <Dropdown
             options={chatGroups}
             onChange={(chatGroup) => setChatGroup(chatGroup)}
             value={null}
-            placeholder="Select private chat group to join 👇"
+            placeholder="Then select private channel to join 👇"
             className={"dropdown"}
           />
           <form style={{ marginTop: 20, marginBottom: 10 }}>
@@ -182,15 +195,16 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
             {/* <input style={{ marginLeft: 2, width: 100, height: 50, backgroundColor: "#323f54", cursor: "pointer" }} type="submit" value="Get your Discord UID with our Discord bot" /> */}
           </form>
           <span style={{ cursor: null }}>
-            Have trouble finding your Discord User ID? Join this{" "}
-            <a href={`https://discord.gg/vXbTWnyd?`} target="_blank" rel="noreferrer">
-              Nansen Discord Server
-            </a>{" "}
-            and type{" "}
+            Have trouble finding your Discord User ID? Type{" "}
             <span style={{ color: "#b9b9b9", cursor: "pointer" }} onClick={() => copyText()}>
               .whoami
-            </span>
+            </span>{" "}
+            in our{" "}
+            <a href={`https://discord.gg/vXbTWnyd?`} target="_blank" rel="noreferrer">
+              Nansen Verified Clubs Discord
+            </a>
           </span>
+
           <div style={{ marginTop: 20, opacity: isLoading ? 0.3 : 1 }}>
             {account ? (
               <>
