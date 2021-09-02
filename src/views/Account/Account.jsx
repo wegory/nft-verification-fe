@@ -172,7 +172,7 @@ function Account({ account, getChainId, getAccount, requestAccount, getBalance }
         <div className={"card"}>
           <Typography variant="h3">Nansen Diamond Hands Club</Typography>
           <Typography variant="subtitle1" style={{ color: "#e3e3e3" }}>
-            Private Discord Channel for club NFT/ERC20 Owners{" "}
+            Private Discord Channel for <span style={{ textDecoration: "underline", color: "#e3e3e3", fontSize: 16 }}>Verified</span> NFT/ERC20 Owners{" "}
           </Typography>
           <a href={`https://discord.gg/vXbTWnyd`} target="_blank" rel="noreferrer">
             <div className={"joinButton"}>
